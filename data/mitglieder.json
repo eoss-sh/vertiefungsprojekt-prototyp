@@ -1,0 +1,503 @@
+[
+  {
+    "nummer": "100001",
+    "typ": "einzelmitglied",
+    "name": "Peter Meier",
+    "nutzer": [{ "vorname": "Peter", "nachname": "Meier" }],
+    "adresse": { "strasse": "Bahnhofstrasse 12", "plz": "8001", "ort": "Zürich" },
+    "status": "aktiv",
+    "status_datum": "2022-03-15"
+  },
+  {
+    "nummer": "100002",
+    "typ": "doppelmitglied",
+    "name": "Max und Anna Muster",
+    "nutzer": [
+      { "vorname": "Max", "nachname": "Muster" },
+      { "vorname": "Anna", "nachname": "Muster" }
+    ],
+    "adresse": { "strasse": "Hauptstrasse 5", "plz": "8717", "ort": "Benken" },
+    "status": "gekuendigt",
+    "status_datum": "2024-01-17"
+  },
+  {
+    "nummer": "100003",
+    "typ": "einzelmitglied",
+    "name": "Sandra Keller",
+    "nutzer": [{ "vorname": "Sandra", "nachname": "Keller" }],
+    "adresse": { "strasse": "Seestrasse 88", "plz": "8800", "ort": "Thalwil" },
+    "status": "aktiv",
+    "status_datum": "2021-06-01"
+  },
+  {
+    "nummer": "100004",
+    "typ": "doppelmitglied",
+    "name": "Thomas und Lisa Brunner",
+    "nutzer": [
+      { "vorname": "Thomas", "nachname": "Brunner" },
+      { "vorname": "Lisa", "nachname": "Brunner" }
+    ],
+    "adresse": { "strasse": "Kirchweg 3", "plz": "3000", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2023-09-20"
+  },
+  {
+    "nummer": "100005",
+    "typ": "einzelmitglied",
+    "name": "Marco Bianchi",
+    "nutzer": [{ "vorname": "Marco", "nachname": "Bianchi" }],
+    "adresse": { "strasse": "Via Roma 14", "plz": "6900", "ort": "Lugano" },
+    "status": "aktiv",
+    "status_datum": "2020-11-10"
+  },
+  {
+    "nummer": "100006",
+    "typ": "einzelmitglied",
+    "name": "Ursula Widmer",
+    "nutzer": [{ "vorname": "Ursula", "nachname": "Widmer" }],
+    "adresse": { "strasse": "Dorfstrasse 22", "plz": "5000", "ort": "Aarau" },
+    "status": "gekuendigt",
+    "status_datum": "2023-12-31"
+  },
+  {
+    "nummer": "100007",
+    "typ": "doppelmitglied",
+    "name": "Hans und Ruth Schmid",
+    "nutzer": [
+      { "vorname": "Hans", "nachname": "Schmid" },
+      { "vorname": "Ruth", "nachname": "Schmid" }
+    ],
+    "adresse": { "strasse": "Bergstrasse 7", "plz": "6003", "ort": "Luzern" },
+    "status": "aktiv",
+    "status_datum": "2019-04-01"
+  },
+  {
+    "nummer": "100008",
+    "typ": "einzelmitglied",
+    "name": "Elena Fischer",
+    "nutzer": [{ "vorname": "Elena", "nachname": "Fischer" }],
+    "adresse": { "strasse": "Rosenweg 9", "plz": "4052", "ort": "Basel" },
+    "status": "aktiv",
+    "status_datum": "2022-07-14"
+  },
+  {
+    "nummer": "100009",
+    "typ": "einzelmitglied",
+    "name": "Stefan Huber",
+    "nutzer": [{ "vorname": "Stefan", "nachname": "Huber" }],
+    "adresse": { "strasse": "Industriestrasse 45", "plz": "8400", "ort": "Winterthur" },
+    "status": "aktiv",
+    "status_datum": "2021-01-20"
+  },
+  {
+    "nummer": "100010",
+    "typ": "doppelmitglied",
+    "name": "Kurt und Monika Steiner",
+    "nutzer": [
+      { "vorname": "Kurt", "nachname": "Steiner" },
+      { "vorname": "Monika", "nachname": "Steiner" }
+    ],
+    "adresse": { "strasse": "Sonnenhof 2", "plz": "9000", "ort": "St. Gallen" },
+    "status": "gekuendigt",
+    "status_datum": "2024-03-01"
+  },
+  {
+    "nummer": "100011",
+    "typ": "einzelmitglied",
+    "name": "Claudia Zimmermann",
+    "nutzer": [{ "vorname": "Claudia", "nachname": "Zimmermann" }],
+    "adresse": { "strasse": "Schulstrasse 16", "plz": "8600", "ort": "Dübendorf" },
+    "status": "aktiv",
+    "status_datum": "2023-02-28"
+  },
+  {
+    "nummer": "100012",
+    "typ": "einzelmitglied",
+    "name": "René Gerber",
+    "nutzer": [{ "vorname": "René", "nachname": "Gerber" }],
+    "adresse": { "strasse": "Lindenstrasse 33", "plz": "2502", "ort": "Biel" },
+    "status": "aktiv",
+    "status_datum": "2020-05-12"
+  },
+  {
+    "nummer": "100013",
+    "typ": "doppelmitglied",
+    "name": "Patrick und Sabine Müller",
+    "nutzer": [
+      { "vorname": "Patrick", "nachname": "Müller" },
+      { "vorname": "Sabine", "nachname": "Müller" }
+    ],
+    "adresse": { "strasse": "Gartenstrasse 8", "plz": "8810", "ort": "Horgen" },
+    "status": "aktiv",
+    "status_datum": "2022-11-05"
+  },
+  {
+    "nummer": "100014",
+    "typ": "einzelmitglied",
+    "name": "Barbara Hofmann",
+    "nutzer": [{ "vorname": "Barbara", "nachname": "Hofmann" }],
+    "adresse": { "strasse": "Talweg 11", "plz": "7000", "ort": "Chur" },
+    "status": "gekuendigt",
+    "status_datum": "2023-06-30"
+  },
+  {
+    "nummer": "100015",
+    "typ": "einzelmitglied",
+    "name": "Daniel Wyss",
+    "nutzer": [{ "vorname": "Daniel", "nachname": "Wyss" }],
+    "adresse": { "strasse": "Mühlegasse 4", "plz": "8200", "ort": "Schaffhausen" },
+    "status": "aktiv",
+    "status_datum": "2021-09-18"
+  },
+  {
+    "nummer": "100016",
+    "typ": "doppelmitglied",
+    "name": "Andreas und Petra Bachmann",
+    "nutzer": [
+      { "vorname": "Andreas", "nachname": "Bachmann" },
+      { "vorname": "Petra", "nachname": "Bachmann" }
+    ],
+    "adresse": { "strasse": "Wiesenstrasse 19", "plz": "4600", "ort": "Olten" },
+    "status": "aktiv",
+    "status_datum": "2023-04-10"
+  },
+  {
+    "nummer": "100017",
+    "typ": "einzelmitglied",
+    "name": "Franziska Lehmann",
+    "nutzer": [{ "vorname": "Franziska", "nachname": "Lehmann" }],
+    "adresse": { "strasse": "Obere Gasse 27", "plz": "3600", "ort": "Thun" },
+    "status": "aktiv",
+    "status_datum": "2020-02-14"
+  },
+  {
+    "nummer": "100018",
+    "typ": "einzelmitglied",
+    "name": "Martin Frei",
+    "nutzer": [{ "vorname": "Martin", "nachname": "Frei" }],
+    "adresse": { "strasse": "Neugasse 51", "plz": "8500", "ort": "Frauenfeld" },
+    "status": "aktiv",
+    "status_datum": "2022-08-22"
+  },
+  {
+    "nummer": "100019",
+    "typ": "doppelmitglied",
+    "name": "Beat und Christine Egger",
+    "nutzer": [
+      { "vorname": "Beat", "nachname": "Egger" },
+      { "vorname": "Christine", "nachname": "Egger" }
+    ],
+    "adresse": { "strasse": "Rathausplatz 1", "plz": "6210", "ort": "Sursee" },
+    "status": "gekuendigt",
+    "status_datum": "2024-02-15"
+  },
+  {
+    "nummer": "100020",
+    "typ": "einzelmitglied",
+    "name": "Nicole Aeschlimann",
+    "nutzer": [{ "vorname": "Nicole", "nachname": "Aeschlimann" }],
+    "adresse": { "strasse": "Feldweg 6", "plz": "3400", "ort": "Burgdorf" },
+    "status": "aktiv",
+    "status_datum": "2021-12-01"
+  },
+  {
+    "nummer": "100021",
+    "typ": "einzelmitglied",
+    "name": "Rolf Baumann",
+    "nutzer": [{ "vorname": "Rolf", "nachname": "Baumann" }],
+    "adresse": { "strasse": "Ringstrasse 30", "plz": "4500", "ort": "Solothurn" },
+    "status": "aktiv",
+    "status_datum": "2023-01-08"
+  },
+  {
+    "nummer": "100022",
+    "typ": "doppelmitglied",
+    "name": "Jürg und Silvia Graf",
+    "nutzer": [
+      { "vorname": "Jürg", "nachname": "Graf" },
+      { "vorname": "Silvia", "nachname": "Graf" }
+    ],
+    "adresse": { "strasse": "Poststrasse 15", "plz": "8280", "ort": "Kreuzlingen" },
+    "status": "aktiv",
+    "status_datum": "2019-10-30"
+  },
+  {
+    "nummer": "100023",
+    "typ": "einzelmitglied",
+    "name": "Simone Roth",
+    "nutzer": [{ "vorname": "Simone", "nachname": "Roth" }],
+    "adresse": { "strasse": "Aarauerstrasse 42", "plz": "5200", "ort": "Brugg" },
+    "status": "aktiv",
+    "status_datum": "2022-04-19"
+  },
+  {
+    "nummer": "100024",
+    "typ": "einzelmitglied",
+    "name": "Christian Bühler",
+    "nutzer": [{ "vorname": "Christian", "nachname": "Bühler" }],
+    "adresse": { "strasse": "Schlossgasse 10", "plz": "8240", "ort": "Thayngen" },
+    "status": "gekuendigt",
+    "status_datum": "2023-11-15"
+  },
+  {
+    "nummer": "100025",
+    "typ": "doppelmitglied",
+    "name": "Roger und Andrea Suter",
+    "nutzer": [
+      { "vorname": "Roger", "nachname": "Suter" },
+      { "vorname": "Andrea", "nachname": "Suter" }
+    ],
+    "adresse": { "strasse": "Marktgasse 21", "plz": "3011", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2021-07-07"
+  },
+  {
+    "nummer": "100026",
+    "typ": "einzelmitglied",
+    "name": "Kathrin Leutenegger",
+    "nutzer": [{ "vorname": "Kathrin", "nachname": "Leutenegger" }],
+    "adresse": { "strasse": "Bäckerstrasse 55", "plz": "8004", "ort": "Zürich" },
+    "status": "aktiv",
+    "status_datum": "2023-05-23"
+  },
+  {
+    "nummer": "100027",
+    "typ": "einzelmitglied",
+    "name": "Markus Vogt",
+    "nutzer": [{ "vorname": "Markus", "nachname": "Vogt" }],
+    "adresse": { "strasse": "Untere Rebgasse 3", "plz": "4058", "ort": "Basel" },
+    "status": "aktiv",
+    "status_datum": "2020-09-02"
+  },
+  {
+    "nummer": "100028",
+    "typ": "doppelmitglied",
+    "name": "Walter und Erika Moser",
+    "nutzer": [
+      { "vorname": "Walter", "nachname": "Moser" },
+      { "vorname": "Erika", "nachname": "Moser" }
+    ],
+    "adresse": { "strasse": "Bundesplatz 8", "plz": "3001", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2022-12-11"
+  },
+  {
+    "nummer": "100029",
+    "typ": "einzelmitglied",
+    "name": "Eveline Aebischer",
+    "nutzer": [{ "vorname": "Eveline", "nachname": "Aebischer" }],
+    "adresse": { "strasse": "Route de Fribourg 20", "plz": "1700", "ort": "Fribourg" },
+    "status": "gekuendigt",
+    "status_datum": "2024-04-01"
+  },
+  {
+    "nummer": "100030",
+    "typ": "einzelmitglied",
+    "name": "Adrian Kunz",
+    "nutzer": [{ "vorname": "Adrian", "nachname": "Kunz" }],
+    "adresse": { "strasse": "Weinbergstrasse 18", "plz": "8006", "ort": "Zürich" },
+    "status": "aktiv",
+    "status_datum": "2021-03-25"
+  },
+  {
+    "nummer": "100031",
+    "typ": "doppelmitglied",
+    "name": "Urs und Marianne Kessler",
+    "nutzer": [
+      { "vorname": "Urs", "nachname": "Kessler" },
+      { "vorname": "Marianne", "nachname": "Kessler" }
+    ],
+    "adresse": { "strasse": "Brünigstrasse 44", "plz": "3800", "ort": "Interlaken" },
+    "status": "aktiv",
+    "status_datum": "2023-08-14"
+  },
+  {
+    "nummer": "100032",
+    "typ": "einzelmitglied",
+    "name": "Corinne Zürcher",
+    "nutzer": [{ "vorname": "Corinne", "nachname": "Zürcher" }],
+    "adresse": { "strasse": "Gerechtigkeitsgasse 50", "plz": "3011", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2020-06-18"
+  },
+  {
+    "nummer": "100033",
+    "typ": "einzelmitglied",
+    "name": "Philippe Blanc",
+    "nutzer": [{ "vorname": "Philippe", "nachname": "Blanc" }],
+    "adresse": { "strasse": "Rue du Lac 7", "plz": "1000", "ort": "Lausanne" },
+    "status": "aktiv",
+    "status_datum": "2022-10-03"
+  },
+  {
+    "nummer": "100034",
+    "typ": "doppelmitglied",
+    "name": "Felix und Doris Ammann",
+    "nutzer": [
+      { "vorname": "Felix", "nachname": "Ammann" },
+      { "vorname": "Doris", "nachname": "Ammann" }
+    ],
+    "adresse": { "strasse": "Grüngasse 13", "plz": "8004", "ort": "Zürich" },
+    "status": "gekuendigt",
+    "status_datum": "2023-10-31"
+  },
+  {
+    "nummer": "100035",
+    "typ": "einzelmitglied",
+    "name": "Isabelle Maurer",
+    "nutzer": [{ "vorname": "Isabelle", "nachname": "Maurer" }],
+    "adresse": { "strasse": "Pilatusstrasse 25", "plz": "6003", "ort": "Luzern" },
+    "status": "aktiv",
+    "status_datum": "2021-11-09"
+  },
+  {
+    "nummer": "100036",
+    "typ": "einzelmitglied",
+    "name": "Lukas Wenger",
+    "nutzer": [{ "vorname": "Lukas", "nachname": "Wenger" }],
+    "adresse": { "strasse": "Spitalgasse 31", "plz": "3011", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2023-07-20"
+  },
+  {
+    "nummer": "100037",
+    "typ": "doppelmitglied",
+    "name": "Ernst und Heidi Schneider",
+    "nutzer": [
+      { "vorname": "Ernst", "nachname": "Schneider" },
+      { "vorname": "Heidi", "nachname": "Schneider" }
+    ],
+    "adresse": { "strasse": "Alpenstrasse 60", "plz": "6004", "ort": "Luzern" },
+    "status": "aktiv",
+    "status_datum": "2019-08-15"
+  },
+  {
+    "nummer": "100038",
+    "typ": "einzelmitglied",
+    "name": "Regula Studer",
+    "nutzer": [{ "vorname": "Regula", "nachname": "Studer" }],
+    "adresse": { "strasse": "Freiestrasse 72", "plz": "4001", "ort": "Basel" },
+    "status": "aktiv",
+    "status_datum": "2022-02-07"
+  },
+  {
+    "nummer": "100039",
+    "typ": "einzelmitglied",
+    "name": "Michael Portmann",
+    "nutzer": [{ "vorname": "Michael", "nachname": "Portmann" }],
+    "adresse": { "strasse": "Obergrundstrasse 99", "plz": "6005", "ort": "Luzern" },
+    "status": "gekuendigt",
+    "status_datum": "2024-05-01"
+  },
+  {
+    "nummer": "100040",
+    "typ": "doppelmitglied",
+    "name": "Bruno und Margrit Hess",
+    "nutzer": [
+      { "vorname": "Bruno", "nachname": "Hess" },
+      { "vorname": "Margrit", "nachname": "Hess" }
+    ],
+    "adresse": { "strasse": "Zeughausgasse 17", "plz": "3011", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2020-12-22"
+  },
+  {
+    "nummer": "100041",
+    "typ": "einzelmitglied",
+    "name": "Sarah Bieri",
+    "nutzer": [{ "vorname": "Sarah", "nachname": "Bieri" }],
+    "adresse": { "strasse": "Könizstrasse 40", "plz": "3008", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2023-03-12"
+  },
+  {
+    "nummer": "100042",
+    "typ": "einzelmitglied",
+    "name": "Dominik Schwarz",
+    "nutzer": [{ "vorname": "Dominik", "nachname": "Schwarz" }],
+    "adresse": { "strasse": "Industrieweg 5", "plz": "6300", "ort": "Zug" },
+    "status": "aktiv",
+    "status_datum": "2021-05-30"
+  },
+  {
+    "nummer": "100043",
+    "typ": "doppelmitglied",
+    "name": "Marcel und Franziska Berger",
+    "nutzer": [
+      { "vorname": "Marcel", "nachname": "Berger" },
+      { "vorname": "Franziska", "nachname": "Berger" }
+    ],
+    "adresse": { "strasse": "Baselstrasse 28", "plz": "4600", "ort": "Olten" },
+    "status": "aktiv",
+    "status_datum": "2022-06-15"
+  },
+  {
+    "nummer": "100044",
+    "typ": "einzelmitglied",
+    "name": "Verena Hartmann",
+    "nutzer": [{ "vorname": "Verena", "nachname": "Hartmann" }],
+    "adresse": { "strasse": "Stadthausstrasse 12", "plz": "8400", "ort": "Winterthur" },
+    "status": "gekuendigt",
+    "status_datum": "2023-09-30"
+  },
+  {
+    "nummer": "100045",
+    "typ": "einzelmitglied",
+    "name": "Oliver Kälin",
+    "nutzer": [{ "vorname": "Oliver", "nachname": "Kälin" }],
+    "adresse": { "strasse": "Seestrasse 200", "plz": "8802", "ort": "Kilchberg" },
+    "status": "aktiv",
+    "status_datum": "2023-11-28"
+  },
+  {
+    "nummer": "100046",
+    "typ": "doppelmitglied",
+    "name": "Paul und Irene Weber",
+    "nutzer": [
+      { "vorname": "Paul", "nachname": "Weber" },
+      { "vorname": "Irene", "nachname": "Weber" }
+    ],
+    "adresse": { "strasse": "Dammweg 9", "plz": "3013", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2020-04-08"
+  },
+  {
+    "nummer": "100047",
+    "typ": "einzelmitglied",
+    "name": "Monika Flückiger",
+    "nutzer": [{ "vorname": "Monika", "nachname": "Flückiger" }],
+    "adresse": { "strasse": "Langstrasse 120", "plz": "8004", "ort": "Zürich" },
+    "status": "aktiv",
+    "status_datum": "2021-08-16"
+  },
+  {
+    "nummer": "100048",
+    "typ": "einzelmitglied",
+    "name": "Christoph Lüthy",
+    "nutzer": [{ "vorname": "Christoph", "nachname": "Lüthy" }],
+    "adresse": { "strasse": "Kramgasse 58", "plz": "3011", "ort": "Bern" },
+    "status": "aktiv",
+    "status_datum": "2022-09-09"
+  },
+  {
+    "nummer": "100049",
+    "typ": "doppelmitglied",
+    "name": "Heinrich und Rosa Tanner",
+    "nutzer": [
+      { "vorname": "Heinrich", "nachname": "Tanner" },
+      { "vorname": "Rosa", "nachname": "Tanner" }
+    ],
+    "adresse": { "strasse": "Waldstrasse 36", "plz": "5400", "ort": "Baden" },
+    "status": "gekuendigt",
+    "status_datum": "2024-06-01"
+  },
+  {
+    "nummer": "100050",
+    "typ": "einzelmitglied",
+    "name": "Laura Reinhard",
+    "nutzer": [{ "vorname": "Laura", "nachname": "Reinhard" }],
+    "adresse": { "strasse": "Oberdorfstrasse 2", "plz": "8001", "ort": "Zürich" },
+    "status": "aktiv",
+    "status_datum": "2023-12-05"
+  }
+]

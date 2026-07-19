@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kundenverwaltung</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #222; background: #fff; padding: 32px; }
+
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .header h1 { font-size: 22px; font-weight: 600; }
+
+    /* Split Button */
+    .split-btn { display: flex; position: relative; }
+    .split-btn-main {
+      padding: 8px 18px; background: #222; color: #fff; border: none;
+      font-size: 14px; cursor: pointer; border-right: 1px solid #555;
+    }
+    .split-btn-arrow {
+      padding: 8px 10px; background: #222; color: #fff; border: none;
+      font-size: 12px; cursor: pointer;
+    }
+    .split-btn-main:hover, .split-btn-arrow:hover { background: #444; }
+    .split-dropdown {
+      display: none; position: absolute; top: 100%; right: 0;
+      background: #fff; border: 1px solid #ccc; min-width: 180px; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .split-dropdown.open { display: block; }
+    .split-dropdown a {
+      display: block; padding: 10px 16px; text-decoration: none;
+      color: #222; font-size: 14px; border-bottom: 1px solid #eee;
+    }
+    .split-dropdown a:last-child { border-bottom: none; }
+    .split-dropdown a:hover { background: #f5f5f5; }
+
+    /* Search */
+    .toolbar { margin-bottom: 16px; }
+    .search-input {
+      padding: 8px 12px; font-size: 14px; border: 1px solid #ccc;
+      width: 300px; outline: none;
+    }
+    .search-input:focus { border-color: #888; }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; padding: 10px 12px; font-size: 13px; font-weight: 600;
+      border-bottom: 2px solid #222; color: #555; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    td { padding: 10px 12px; font-size: 14px; border-bottom: 1px solid #eee; }
+    tr:hover td { background: #f9f9f9; }
+
+    /* Status Badge */
+    .status { font-size: 12px; padding: 3px 8px; border-radius: 3px; display: inline-block; }
+    .status-aktiv { background: #e8e8e8; color: #222; }
+    .status-gekuendigt { background: #222; color: #fff; }
+
+    /* Pagination */
+    .pagination {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 20px; font-size: 14px; color: #666;
+    }
+    .pagination-buttons { display: flex; gap: 4px; }
+    .pagination-buttons button {
+      padding: 6px 12px; border: 1px solid #ccc; background: #fff;
+      cursor: pointer; font-size: 14px;
+    }
+    .pagination-buttons button:hover { background: #f5f5f5; }
+    .pagination-buttons button.active { background: #222; color: #fff; border-color: #222; }
+    .pagination-buttons button:disabled { opacity: 0.4; cursor: default; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Kunden</h1>
+    <div class="split-btn">
+      <button class="split-btn-main">Neu</button>
+      <button class="split-btn-arrow" id="splitToggle">&#9660;</button>
+      <div class="split-dropdown" id="splitDropdown">
+        <a href="#">Platzhalter 1</a>
+        <a href="#">Platzhalter 2</a>
+        <a href="#">Platzhalter 3</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" class="search-input" id="searchInput" placeholder="Suche nach Name, Nummer, Ort...">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nummer</th>
+        <th>Name</th>
+        <th>Strasse</th>
+        <th>PLZ</th>
+        <th>Ort</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <div class="pagination">
+    <span id="pageInfo"></span>
+    <div class="pagination-buttons" id="pageButtons"></div>
+  </div>
+
+  <script>
+    const PAGE_SIZE = 20;
+    let allData = [];
+    let filtered = [];
+    let currentPage = 1;
+
+    async function init() {
+      const res = await fetch('data/mitglieder.json');
+      allData = await res.json();
+      filtered = allData;
+      render();
+    }
+
+    function render() {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const page = filtered.slice(start, start + PAGE_SIZE);
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+      document.getElementById('tableBody').innerHTML = page.map(m => `
+        <tr>
+          <td>${m.nummer}</td>
+          <td>${m.name}</td>
+          <td>${m.adresse.strasse}</td>
+          <td>${m.adresse.plz}</td>
+          <td>${m.adresse.ort}</td>
+          <td><span class="status status-${m.status}">${m.status}</span></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('pageInfo').textContent =
+        `${start + 1}–${Math.min(start + PAGE_SIZE, filtered.length)} von ${filtered.length}`;
+
+      let btns = '';
+      btns += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goTo(${currentPage - 1})">&laquo;</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        btns += `<button class="${i === currentPage ? 'active' : ''}" onclick="goTo(${i})">${i}</button>`;
+      }
+      btns += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goTo(${currentPage + 1})">&raquo;</button>`;
+      document.getElementById('pageButtons').innerHTML = btns;
+    }
+
+    function goTo(page) {
+      currentPage = page;
+      render();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const q = this.value.toLowerCase();
+      filtered = allData.filter(m =>
+        m.nummer.includes(q) ||
+        m.name.toLowerCase().includes(q) ||
+        m.adresse.strasse.toLowerCase().includes(q) ||
+        m.adresse.plz.includes(q) ||
+        m.adresse.ort.toLowerCase().includes(q) ||
+        m.status.toLowerCase().includes(q)
+      );
+      currentPage = 1;
+      render();
+    });
+
+    // Split button dropdown
+    document.getElementById('splitToggle').addEventListener('click', function (e) {
+      e.stopPropagation();
+      document.getElementById('splitDropdown').classList.toggle('open');
+    });
+    document.addEventListener('click', function () {
+      document.getElementById('splitDropdown').classList.remove('open');
+    });
+
+    init();
+  </script>
+</body>
+</html>
