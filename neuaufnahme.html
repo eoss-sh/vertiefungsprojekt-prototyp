@@ -49,6 +49,36 @@
       background: #222; color: #fff; font-weight: 600;
     }
     .btn:hover { background: #444; }
+
+    /* Picker Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 100; justify-content: center; padding-top: 120px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff; width: 560px; max-height: 480px; border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column;
+      overflow: hidden; align-self: flex-start;
+    }
+    .modal-input {
+      width: 100%; padding: 16px 20px; font-size: 16px; border: none;
+      border-bottom: 1px solid #eee; outline: none;
+    }
+    .modal-results { overflow-y: auto; flex: 1; }
+    .modal-section-label {
+      padding: 8px 20px 4px; font-size: 11px; font-weight: 600; color: #999;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .modal-item {
+      padding: 10px 20px; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modal-item:hover, .modal-item.selected { background: #f0f0f0; }
+    .modal-item .item-label { flex: 1; }
+    .modal-item .item-meta { font-size: 12px; color: #888; }
+    .modal-spinner { padding: 12px 20px; font-size: 13px; color: #999; }
+    .modal-hint { padding: 16px 20px; font-size: 13px; color: #999; text-align: center; }
   </style>
 </head>
 <body>
@@ -62,8 +92,16 @@
   <div class="columns" id="formContent"></div>
 
   <div class="footer-actions">
-    <a class="link-subtle" href="schritt2.html">&rsaquo; Rechnung geht an jemand anderen</a>
+    <a class="link-subtle" href="#" id="linkRechnung">&rsaquo; Rechnung geht an jemand anderen</a>
     <button class="btn" onclick="window.location.href='schritt3.html'">&rsaquo; Mitgliedschaft erfassen</button>
+  </div>
+
+  <!-- Picker Modal for Rechnungsempfänger -->
+  <div class="modal-overlay" id="rgModalOverlay">
+    <div class="modal">
+      <input type="text" class="modal-input" id="rgModalInput" placeholder="Name oder Adresse eingeben..." autocomplete="off">
+      <div class="modal-results" id="rgModalResults"></div>
+    </div>
   </div>
 
   <script>
@@ -244,6 +282,181 @@
     }
 
     renderForm();
+
+    // ─── E-Mail Sammlung für Schritt 3 ───
+    function collectEmails() {
+      const emails = [];
+      document.querySelectorAll('input[type="email"]').forEach(input => {
+        if (input.value.trim()) emails.push(input.value.trim());
+      });
+      return emails;
+    }
+
+    function saveEmailsToSession(source, emails) {
+      const stored = JSON.parse(sessionStorage.getItem('erfassung_emails') || '{}');
+      stored[source] = emails;
+      sessionStorage.setItem('erfassung_emails', JSON.stringify(stored));
+    }
+
+    function collectMitgliedName() {
+      const inputs = document.querySelectorAll('input[type="text"]');
+      const names = [];
+      // Collect vorname/nachname pairs from person blocks
+      document.querySelectorAll('.col-section h2').forEach(h2 => {
+        const section = h2.closest('.col-section');
+        if (!section) return;
+        const vn = section.querySelector('input[type="text"]:nth-of-type(1)');
+        const nn = section.querySelector('input[type="text"]:nth-of-type(2)');
+        if (vn && nn && vn.value.trim() && nn.value.trim()) {
+          names.push(vn.value.trim() + ' ' + nn.value.trim());
+        }
+      });
+      return names.length > 0 ? names[0] : (vorname + ' ' + nachname).trim();
+    }
+
+    // Save emails and name before navigating away
+    document.querySelector('.btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      saveEmailsToSession('schritt1', collectEmails());
+      sessionStorage.setItem('erfassung_name', collectMitgliedName());
+      window.location.href = 'schritt3.html';
+    });
+
+    // ─── Rechnungsempfänger Picker ───
+
+    let allData = [];
+    let rgModalItems = [];
+    let rgSelectedIndex = -1;
+    let rgSearchTimeout = null;
+
+    fetch('data/mitglieder.json').then(r => r.json()).then(d => allData = d);
+
+    function openRgModal() {
+      document.getElementById('rgModalOverlay').classList.add('open');
+      const input = document.getElementById('rgModalInput');
+      input.value = '';
+      rgSelectedIndex = -1;
+      rgModalItems = [];
+      renderRgResults('', [], false);
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function closeRgModal() {
+      document.getElementById('rgModalOverlay').classList.remove('open');
+      clearTimeout(rgSearchTimeout);
+    }
+
+    function renderRgResults(query, kundenResults, loading) {
+      const results = document.getElementById('rgModalResults');
+      rgModalItems = [];
+      let html = '';
+
+      html += '<div class="modal-section-label">Erfassung</div>';
+      const types = [
+        { key: 'rg_partner', label: 'Erfassung Rechnungspartner' },
+        { key: 'rg_adresse', label: 'Erfassung Rechnungsadresse' },
+        { key: 'rg_firma', label: 'Erfassung Rechnungspartner Firma' },
+        { key: 'rg_doppel', label: 'Erfassung Rechnungsdoppelpartner' },
+      ];
+      types.forEach(t => {
+        const idx = rgModalItems.length;
+        const displayQuery = query.trim() ? ' ' + query.trim() : '';
+        rgModalItems.push({ action: 'new', type: t.key, query });
+        html += `<div class="modal-item" data-index="${idx}">
+          <span class="item-label">${t.label}${displayQuery ? ' &ldquo;' + escAttr(displayQuery.trim()) + '&rdquo;' : ''}</span>
+        </div>`;
+      });
+
+      html += '<div class="modal-section-label">Bestehende Mitglieder</div>';
+      if (!query.trim()) {
+        html += '<div class="modal-spinner">Tippe einen Namen ein...</div>';
+      } else if (loading) {
+        html += '<div class="modal-spinner">Suche...</div>';
+      } else if (kundenResults.length === 0) {
+        html += '<div class="modal-spinner">Keine Treffer</div>';
+      } else {
+        kundenResults.forEach(m => {
+          const idx = rgModalItems.length;
+          rgModalItems.push({ action: 'use', data: m });
+          let statusText = m.status === 'gekuendigt'
+            ? `Gekündigt am ${new Date(m.status_datum).toLocaleDateString('de-CH')}`
+            : m.status;
+          html += `<div class="modal-item" data-index="${idx}">
+            <span class="item-label">Verwendung Partner ${escAttr(m.name)} - ${m.nummer}<br><span class="item-meta">${escAttr(m.adresse.strasse)}, ${escAttr(m.adresse.plz)} ${escAttr(m.adresse.ort)} - ${statusText}</span></span>
+          </div>`;
+        });
+      }
+
+      results.innerHTML = html;
+      updateRgSelection();
+    }
+
+    function updateRgSelection() {
+      document.querySelectorAll('#rgModalResults .modal-item').forEach((el, i) => {
+        el.classList.toggle('selected', i === rgSelectedIndex);
+        if (i === rgSelectedIndex) el.scrollIntoView({ block: 'nearest' });
+      });
+    }
+
+    function selectRgItem(index) {
+      if (index < 0 || index >= rgModalItems.length) return;
+      saveEmailsToSession('schritt1', collectEmails());
+      sessionStorage.setItem('erfassung_name', collectMitgliedName());
+      const item = rgModalItems[index];
+      if (item.action === 'new') {
+        const parts = (item.query || '').trim().split(/\s+/);
+        const vn = parts[0] || '';
+        const nn = parts.slice(1).join(' ') || '';
+        window.location.href = `schritt2.html?typ=${item.type}&vorname=${encodeURIComponent(vn)}&nachname=${encodeURIComponent(nn)}`;
+      } else if (item.action === 'use') {
+        const m = item.data;
+        const p = new URLSearchParams({ typ: 'rg_partner' });
+        m.nutzer.forEach((n, i) => { p.set('vorname' + (i||''), n.vorname); p.set('nachname' + (i||''), n.nachname); });
+        p.set('strasse', m.adresse.strasse);
+        p.set('plz', m.adresse.plz);
+        p.set('ort', m.adresse.ort);
+        window.location.href = `schritt2.html?${p.toString()}`;
+      }
+    }
+
+    document.getElementById('rgModalInput').addEventListener('input', function () {
+      const q = this.value;
+      rgSelectedIndex = -1;
+      clearTimeout(rgSearchTimeout);
+      if (!q.trim()) { renderRgResults('', [], false); return; }
+      renderRgResults(q, [], true);
+      rgSearchTimeout = setTimeout(() => {
+        const lower = q.toLowerCase();
+        const matches = allData.filter(m =>
+          m.name.toLowerCase().includes(lower) ||
+          m.nummer.includes(lower) ||
+          m.adresse.strasse.toLowerCase().includes(lower) ||
+          m.adresse.ort.toLowerCase().includes(lower)
+        ).slice(0, 8);
+        renderRgResults(q, matches, false);
+      }, 500);
+    });
+
+    document.getElementById('rgModalInput').addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); rgSelectedIndex = Math.min(rgSelectedIndex + 1, rgModalItems.length - 1); updateRgSelection(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); rgSelectedIndex = Math.max(rgSelectedIndex - 1, 0); updateRgSelection(); }
+      else if (e.key === 'Enter') { e.preventDefault(); if (rgSelectedIndex >= 0) selectRgItem(rgSelectedIndex); }
+      else if (e.key === 'Escape') { closeRgModal(); }
+    });
+
+    document.getElementById('rgModalResults').addEventListener('click', function (e) {
+      const item = e.target.closest('.modal-item');
+      if (item) selectRgItem(parseInt(item.dataset.index));
+    });
+
+    document.getElementById('rgModalOverlay').addEventListener('click', function (e) {
+      if (e.target === this) closeRgModal();
+    });
+
+    document.getElementById('linkRechnung').addEventListener('click', function (e) {
+      e.preventDefault();
+      openRgModal();
+    });
   </script>
 </body>
 </html>

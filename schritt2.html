@@ -3,31 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schritt 2 - Rechnungsadresse</title>
+  <title>Schritt 2 - Rechnungsempfänger</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #222; background: #fff; padding: 32px; }
+
     .breadcrumb { font-size: 13px; color: #888; margin-bottom: 24px; }
     .breadcrumb a { color: #222; text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
+
     h1 { font-size: 22px; font-weight: 600; margin-bottom: 32px; }
-    .placeholder { padding: 60px; text-align: center; color: #999; border: 2px dashed #ddd; border-radius: 8px; }
-    .footer-actions { margin-top: 40px; display: flex; justify-content: flex-end; gap: 16px; }
-    .btn { padding: 10px 24px; font-size: 14px; cursor: pointer; border: 1px solid #ccc; background: #fff; }
-    .btn:hover { background: #f5f5f5; }
-    .btn-primary { background: #222; color: #fff; border-color: #222; }
-    .btn-primary:hover { background: #444; }
+
+    .columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+    .columns-single { display: grid; grid-template-columns: 1fr; gap: 32px; max-width: 33%; }
+    .columns-dm { }
+    .dm-row1 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; margin-bottom: 8px; }
+    .dm-row2 { max-width: 33%; }
+
+    .col-section h2 {
+      font-size: 15px; font-weight: 600; margin-bottom: 16px;
+      border-bottom: 1px solid #eee; padding-bottom: 8px;
+    }
+    .col-section { margin-bottom: 24px; }
+
+    .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .form-group { flex: 1; }
+    .form-group.full { flex: 1 1 100%; }
+    .form-group label {
+      display: block; font-size: 12px; font-weight: 600; color: #666;
+      margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 8px 10px; font-size: 14px; border: 1px solid #ccc;
+      outline: none; font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #888; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .footer-actions {
+      margin-top: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+    }
+    .btn {
+      padding: 10px 24px; font-size: 14px; cursor: pointer; border: none;
+      background: #222; color: #fff; font-weight: 600;
+    }
+    .btn:hover { background: #444; }
+    .btn-secondary {
+      padding: 10px 24px; font-size: 14px; cursor: pointer;
+      border: 1px solid #ccc; background: #fff; color: #222;
+    }
+    .btn-secondary:hover { background: #f5f5f5; }
   </style>
 </head>
 <body>
+
   <div class="breadcrumb">
-    <a href="index.html">Mitglieder</a> &rsaquo; Neuaufnahme &rsaquo; Rechnungsadresse
+    <a href="index.html">Mitglieder</a> &rsaquo; <a href="javascript:history.back()">Neuaufnahme</a> &rsaquo; Rechnungsempfänger
   </div>
-  <h1>Schritt 2 - Rechnungsadresse</h1>
-  <div class="placeholder">Inhalt folgt</div>
+
+  <h1 id="title"></h1>
+
+  <div id="formContent"></div>
+
   <div class="footer-actions">
-    <button class="btn" onclick="history.back()">Zurück</button>
-    <button class="btn btn-primary" onclick="window.location.href='schritt3.html'">Weiter</button>
+    <button class="btn" onclick="window.location.href='schritt3.html'">&rsaquo; Mitgliedschaft erfassen</button>
   </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const typ = params.get('typ') || 'rg_partner';
+    const vorname = params.get('vorname') || params.get('vorname0') || '';
+    const nachname = params.get('nachname') || params.get('nachname0') || '';
+    const vorname1 = params.get('vorname1') || '';
+    const nachname1 = params.get('nachname1') || '';
+    const strasse = params.get('strasse') || '';
+    const plz = params.get('plz') || '';
+    const ort = params.get('ort') || '';
+
+    const titles = {
+      rg_partner: 'Schritt 2 - Erfassung Rechnungspartner',
+      rg_adresse: 'Schritt 2 - Erfassung Rechnungsadresse',
+      rg_firma: 'Schritt 2 - Erfassung Rechnungspartner Firma',
+      rg_doppel: 'Schritt 2 - Erfassung Rechnungsdoppelpartner',
+    };
+
+    document.getElementById('title').textContent = titles[typ] || 'Schritt 2 - Rechnungsempfänger';
+
+    function personBlock(title, vn, nn) {
+      return `
+        <div class="col-section">
+          <h2>${title}</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anrede</label>
+              <select>
+                <option value="">Anrede</option>
+                <option>Herr</option>
+                <option>Frau</option>
+                <option value="">Leer</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Vorname</label>
+              <input type="text" value="${escAttr(vn)}">
+            </div>
+            <div class="form-group">
+              <label>Nachname</label>
+              <input type="text" value="${escAttr(nn)}">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full">
+              <label>E-Mail</label>
+              <input type="email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full">
+              <label>Telefon</label>
+              <input type="tel">
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function adresseBlock(s, p, o) {
+      return `
+        <div class="col-section">
+          <h2>Adresse</h2>
+          <div class="form-row">
+            <div class="form-group full">
+              <label>Strasse</label>
+              <input type="text" value="${escAttr(s)}">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full">
+              <label>Adresszusatz</label>
+              <input type="text">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full">
+              <label>PLZ / Ort</label>
+              <input type="text" value="${escAttr((p && o) ? p + ' ' + o : p || o)}">
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderForm() {
+      const container = document.getElementById('formContent');
+      let html = '';
+
+      if (typ === 'rg_partner') {
+        // Analog EM: Person | Adresse | Memo
+        container.className = 'columns';
+        html += '<div>' + personBlock('Person', vorname, nachname) + '</div>';
+        html += '<div>' + adresseBlock(strasse, plz, ort) + '</div>';
+        html += `<div>
+          <div class="col-section">
+            <h2>Memo</h2>
+            <div class="form-row">
+              <div class="form-group full">
+                <textarea placeholder=""></textarea>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+      } else if (typ === 'rg_adresse') {
+        // Nur Adresse
+        container.className = 'columns-single';
+        html += adresseBlock(strasse, plz, ort);
+
+      } else if (typ === 'rg_firma') {
+        // Analog FM: Firma + Memo | Kontakt | Adresse
+        container.className = 'columns';
+        html += `<div>
+          <div class="col-section">
+            <h2>Firma</h2>
+            <div class="form-row">
+              <div class="form-group full">
+                <label>Firmenname</label>
+                <input type="text" value="${escAttr(vorname + (nachname ? ' ' + nachname : ''))}">
+              </div>
+            </div>
+          </div>
+          <div class="col-section">
+            <h2>Memo</h2>
+            <div class="form-row">
+              <div class="form-group full">
+                <textarea placeholder=""></textarea>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        html += '<div>' + personBlock('Kontakt', '', '') + '</div>';
+        html += '<div>' + adresseBlock(strasse, plz, ort) + '</div>';
+
+      } else if (typ === 'rg_doppel') {
+        // Analog DM: Person 1 + Person 2 + DM-Block in row 1, Adresse in row 2
+        container.className = 'columns-dm';
+        html += '<div class="dm-row1">';
+        html += '<div>' + personBlock('Person 1', vorname, nachname) + '</div>';
+        html += '<div>' + personBlock('Person 2', vorname1, nachname1) + '</div>';
+        html += `<div>
+          <div class="col-section">
+            <h2>Doppelmitgliedschaft</h2>
+            <div class="form-row">
+              <div class="form-group full">
+                <label>Anrede Doppelmitgliedschaft</label>
+                <select>
+                  <option value="">Bitte wählen</option>
+                  <option>Herr und Frau</option>
+                  <option>Frau und Herr</option>
+                  <option>Herren</option>
+                  <option>Frauen</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group full">
+                <label>Doppelname</label>
+                <input type="text">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group full">
+                <label>Memo</label>
+                <textarea placeholder=""></textarea>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        html += '</div>';
+        html += '<div class="dm-row2">' + adresseBlock(strasse, plz, ort) + '</div>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    function escAttr(s) {
+      return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    renderForm();
+
+    // ─── E-Mail Sammlung für Schritt 3 ───
+    document.querySelector('.btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      const emails = [];
+      document.querySelectorAll('input[type="email"]').forEach(input => {
+        if (input.value.trim()) emails.push(input.value.trim());
+      });
+      const stored = JSON.parse(sessionStorage.getItem('erfassung_emails') || '{}');
+      stored['schritt2'] = emails;
+      sessionStorage.setItem('erfassung_emails', JSON.stringify(stored));
+      window.location.href = 'schritt3.html';
+    });
+  </script>
 </body>
 </html>

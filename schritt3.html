@@ -3,31 +3,350 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schritt 3 - Abschluss</title>
+  <title>Schritt 3 - Mitgliedschaft & Abrechnung</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #222; background: #fff; padding: 32px; }
+
     .breadcrumb { font-size: 13px; color: #888; margin-bottom: 24px; }
     .breadcrumb a { color: #222; text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
+
     h1 { font-size: 22px; font-weight: 600; margin-bottom: 32px; }
-    .placeholder { padding: 60px; text-align: center; color: #999; border: 2px dashed #ddd; border-radius: 8px; }
-    .footer-actions { margin-top: 40px; display: flex; justify-content: flex-end; gap: 16px; }
-    .btn { padding: 10px 24px; font-size: 14px; cursor: pointer; border: 1px solid #ccc; background: #fff; }
+
+    .columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+
+    .col-section h2 {
+      font-size: 15px; font-weight: 600; margin-bottom: 16px;
+      border-bottom: 1px solid #eee; padding-bottom: 8px;
+    }
+    .col-section { margin-bottom: 24px; }
+
+    .form-row { margin-bottom: 12px; }
+    .form-group label {
+      display: block; font-size: 12px; font-weight: 600; color: #666;
+      margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .form-group select {
+      width: 100%; padding: 8px 10px; font-size: 14px; border: 1px solid #ccc; outline: none;
+    }
+    .form-group select:focus { border-color: #888; }
+
+    /* Checkbox / Radio rows */
+    .check-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px;
+    }
+    .check-row input[type="checkbox"], .check-row input[type="radio"] {
+      width: 16px; height: 16px; accent-color: #222;
+    }
+    .check-row select {
+      padding: 4px 8px; font-size: 13px; border: 1px solid #ccc; outline: none;
+    }
+
+    /* Document preview card */
+    .doc-preview {
+      margin-top: 16px; border: 1px solid #ddd; border-radius: 6px;
+      padding: 16px; background: #fafafa; position: relative;
+    }
+    .doc-preview-icons {
+      display: flex; gap: 8px; margin-bottom: 12px;
+    }
+    .doc-icon {
+      width: 28px; height: 28px; border-radius: 50%; background: #eee; border: 1px solid #ddd;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      font-size: 13px; color: #666;
+    }
+    .doc-icon:hover { background: #ddd; }
+    .doc-lines { }
+    .doc-line {
+      height: 8px; background: #ddd; border-radius: 2px; margin-bottom: 6px;
+    }
+    .doc-line.short { width: 60%; }
+    .doc-line.medium { width: 80%; }
+    .doc-line.long { width: 95%; }
+    .doc-line.title { height: 10px; width: 40%; background: #ccc; margin-bottom: 10px; }
+
+    .doc-icon-subtle { opacity: 0.35; }
+    .doc-icon-subtle:hover { opacity: 1; }
+
+    .preview-row {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; margin-top: 24px;
+    }
+
+    /* Preview Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 100; justify-content: center; align-items: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-doc {
+      background: #fff; width: 600px; max-height: 80vh; border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2); overflow-y: auto;
+    }
+    .modal-doc-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 24px; border-bottom: 1px solid #eee;
+    }
+    .modal-doc-header h3 { font-size: 16px; font-weight: 600; }
+    .modal-close {
+      background: none; border: none; font-size: 20px; cursor: pointer; color: #888;
+    }
+    .modal-close:hover { color: #222; }
+    .modal-doc-body { padding: 24px; }
+    .modal-doc-body .doc-letter {
+      font-size: 13px; line-height: 1.8; color: #444;
+    }
+    .modal-doc-body .doc-letter p { margin-bottom: 12px; }
+    .modal-doc-body .doc-letter .address { margin-bottom: 24px; }
+    .modal-doc-body .doc-letter .subject { font-weight: 600; margin-bottom: 16px; }
+    .modal-doc-body textarea {
+      width: 100%; min-height: 300px; font-size: 13px; line-height: 1.8;
+      border: 1px solid #ccc; padding: 16px; font-family: inherit; outline: none;
+    }
+
+    .footer-actions {
+      margin-top: 40px; display: flex; justify-content: flex-end; gap: 16px;
+    }
+    .btn {
+      padding: 10px 24px; font-size: 14px; cursor: pointer; border: 1px solid #ccc;
+      background: #fff; font-weight: 600;
+    }
     .btn:hover { background: #f5f5f5; }
+    .btn-back { background: #fff; color: #222; border: 1px solid #ccc; }
     .btn-primary { background: #222; color: #fff; border-color: #222; }
     .btn-primary:hover { background: #444; }
   </style>
 </head>
 <body>
+
   <div class="breadcrumb">
-    <a href="index.html">Mitglieder</a> &rsaquo; Neuaufnahme &rsaquo; Abschluss
+    <a href="index.html">Mitglieder</a> &rsaquo; <a href="javascript:history.back()">Neuaufnahme</a> &rsaquo; Mitgliedschaft & Abrechnung
   </div>
-  <h1>Schritt 3 - Abschluss</h1>
-  <div class="placeholder">Inhalt folgt</div>
+
+  <h1>Schritt 3 - Mitgliedschaft & Abrechnung</h1>
+
+  <div class="columns">
+    <!-- Spalte 1: Mitgliedschaft -->
+    <div>
+      <div class="col-section">
+        <h2>Mitgliedschaft</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Mitgliederkategorie</label>
+            <select id="kategorie">
+              <option value="50">Einzelmitgliedschaft - CHF 50.00</option>
+              <option value="100">Kollektivmitgliedschaft - CHF 100.00</option>
+              <option value="0">Ehrenmitgliedschaft - CHF 0.00</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vertragsbedingung</label>
+            <select id="vertrag">
+              <option>Normal</option>
+              <option>1. Jahr kostenlos</option>
+              <option>1. Jahr keine Rechnung</option>
+              <option>kostenlos unbefristet</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spalte 2: Abrechnung -->
+    <div>
+      <div class="col-section">
+        <h2>Abrechnung</h2>
+        <div class="check-row">
+          <input type="checkbox" id="rechnungCheck" checked>
+          <label for="rechnungCheck">Rechnung über <strong id="betragLabel">CHF 50.00</strong> direkt erstellen</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spalte 3: Kommunikation -->
+    <div>
+      <div class="col-section">
+        <h2>Kommunikation</h2>
+        <div class="check-row">
+          <input type="radio" name="komm" id="kommBrief" checked>
+          <select id="briefTyp">
+            <option>Begrüssungsbrief</option>
+            <option>Spezialbrief</option>
+          </select>
+          <label for="kommBrief">erstellen</label>
+        </div>
+        <div class="check-row" id="emailRow">
+          <input type="radio" name="komm" id="kommEmail">
+          <select id="emailTarget"></select>
+          <label for="kommEmail">versenden</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Previews auf gleicher Höhe -->
+  <div class="preview-row">
+    <div></div>
+    <div>
+      <div class="doc-preview">
+        <div class="doc-preview-icons">
+          <div class="doc-icon" title="Vorschau" onclick="openPreview('rechnung')">&#128065;</div>
+          <div class="doc-icon doc-icon-subtle" title="Bearbeiten" onclick="openEdit('rechnung')">&#9998;</div>
+        </div>
+        <div class="doc-lines">
+          <div class="doc-line title"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line medium"></div>
+          <div class="doc-line short"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line medium"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="doc-preview">
+        <div class="doc-preview-icons">
+          <div class="doc-icon" title="Vorschau" onclick="openPreview('brief')">&#128065;</div>
+          <div class="doc-icon doc-icon-subtle" title="Bearbeiten" onclick="openEdit('brief')">&#9998;</div>
+        </div>
+        <div class="doc-lines">
+          <div class="doc-line title"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line medium"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line short"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line long"></div>
+          <div class="doc-line medium"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="footer-actions">
-    <button class="btn" onclick="history.back()">Zurück</button>
-    <button class="btn btn-primary" onclick="window.location.href='index.html'">Mitgliedschaft erfassen</button>
+    <button class="btn btn-back" onclick="history.back()">&lsaquo; zurück zum Rechnungsempfänger</button>
+    <button class="btn btn-primary" id="btnFertig">Fertigstellen und Brief und Rechnung versenden</button>
   </div>
+
+  <!-- Preview Modal -->
+  <div class="modal-overlay" id="previewOverlay">
+    <div class="modal-doc">
+      <div class="modal-doc-header">
+        <h3 id="previewTitle"></h3>
+        <button class="modal-close" onclick="closePreview()">&times;</button>
+      </div>
+      <div class="modal-doc-body" id="previewBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const rechnungText = `Max und Anna Muster
+Strasse 1
+8717 Benken
+
+Benken, ${new Date().toLocaleDateString('de-CH')}
+
+Rechnung Nr. 2024-001
+
+Sehr geehrte Damen und Herren
+
+Wir erlauben uns, Ihnen folgende Mitgliedschaftsgebühr in Rechnung zu stellen:
+
+Einzelmitgliedschaft 2024    CHF 50.00
+──────────────────────────────────
+Total                        CHF 50.00
+
+Zahlbar innert 30 Tagen.
+
+Freundliche Grüsse
+Verein Musterverein`;
+
+    const briefText = `Max und Anna Muster
+Strasse 1
+8717 Benken
+
+Benken, ${new Date().toLocaleDateString('de-CH')}
+
+Willkommen als neues Mitglied
+
+Sehr geehrte Damen und Herren
+
+Wir freuen uns sehr, Sie als neues Mitglied in unserem Verein begrüssen zu dürfen.
+
+Ihre Mitgliedschaft ist ab sofort aktiv. Beiliegend finden Sie Ihre Rechnung für das laufende Jahr.
+
+Als Mitglied profitieren Sie von folgenden Vorteilen:
+- Zugang zu allen Vereinsanlässen
+- Vergünstigungen bei Partnerorganisationen
+- Monatlicher Newsletter
+
+Bei Fragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+
+Freundliche Grüsse
+Verein Musterverein`;
+
+    // ─── E-Mails aus sessionStorage laden ───
+    const stored = JSON.parse(sessionStorage.getItem('erfassung_emails') || '{}');
+    const allEmails = [...new Set(Object.values(stored).flat().filter(Boolean))];
+    const emailSelect = document.getElementById('emailTarget');
+    const emailRow = document.getElementById('emailRow');
+
+    if (allEmails.length === 0) {
+      emailRow.style.display = 'none';
+    } else {
+      allEmails.forEach(email => {
+        const opt = document.createElement('option');
+        opt.textContent = 'E-Mail an ' + email;
+        opt.value = email;
+        emailSelect.appendChild(opt);
+      });
+    }
+
+    // Update Betrag when Kategorie changes
+    document.getElementById('kategorie').addEventListener('change', function () {
+      const betrag = parseFloat(this.value).toFixed(2);
+      document.getElementById('betragLabel').textContent = 'CHF ' + betrag;
+    });
+
+    function openPreview(type) {
+      document.getElementById('previewOverlay').classList.add('open');
+      document.getElementById('previewTitle').textContent =
+        type === 'rechnung' ? 'Vorschau Rechnung' : 'Vorschau Brief';
+      const text = type === 'rechnung' ? rechnungText : briefText;
+      document.getElementById('previewBody').innerHTML =
+        '<div class="doc-letter">' + text.split('\n').map(l => l ? '<p>' + l + '</p>' : '<br>').join('') + '</div>';
+    }
+
+    function openEdit(type) {
+      document.getElementById('previewOverlay').classList.add('open');
+      document.getElementById('previewTitle').textContent =
+        type === 'rechnung' ? 'Rechnung bearbeiten' : 'Brief bearbeiten';
+      const text = type === 'rechnung' ? rechnungText : briefText;
+      document.getElementById('previewBody').innerHTML =
+        '<textarea>' + text + '</textarea>';
+    }
+
+    function closePreview() {
+      document.getElementById('previewOverlay').classList.remove('open');
+    }
+
+    document.getElementById('previewOverlay').addEventListener('click', function (e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePreview();
+    });
+
+    // Fertigstellen → Betrag speichern und zur Bestätigung
+    document.getElementById('btnFertig').addEventListener('click', function () {
+      const betrag = parseFloat(document.getElementById('kategorie').value).toFixed(2);
+      sessionStorage.setItem('erfassung_betrag', betrag);
+      window.location.href = 'bestaetigung.html';
+    });
+  </script>
 </body>
 </html>
