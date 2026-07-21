@@ -11,29 +11,30 @@
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
     .header h1 { font-size: 22px; font-weight: 600; }
 
-    /* Split Button */
-    .split-btn { display: flex; position: relative; }
-    .split-btn-main {
+    /* Neu Button */
+    .neu-btn-wrap { position: relative; }
+    .neu-btn {
       padding: 8px 18px; background: #222; color: #fff; border: none;
-      font-size: 14px; cursor: pointer; border-right: 1px solid #555;
+      font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px;
     }
-    .split-btn-arrow {
-      padding: 8px 10px; background: #222; color: #fff; border: none;
-      font-size: 12px; cursor: pointer;
-    }
-    .split-btn-main:hover, .split-btn-arrow:hover { background: #444; }
-    .split-dropdown {
+    .neu-btn:hover { background: #444; }
+    .neu-btn .chevron { font-size: 10px; }
+    .neu-dropdown {
       display: none; position: absolute; top: 100%; right: 0;
-      background: #fff; border: 1px solid #ccc; min-width: 240px; z-index: 10;
+      background: #fff; border: 1px solid #ccc; min-width: 280px; z-index: 10;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .split-dropdown.open { display: block; }
-    .split-dropdown a {
-      display: block; padding: 10px 16px; text-decoration: none;
+    .neu-dropdown.open { display: block; }
+    .neu-dropdown a {
+      display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none;
       color: #222; font-size: 14px; border-bottom: 1px solid #eee;
     }
-    .split-dropdown a:last-child { border-bottom: none; }
-    .split-dropdown a:hover { background: #f5f5f5; }
+    .neu-dropdown a svg { flex-shrink: 0; }
+    .neu-dropdown a:last-child { border-bottom: none; }
+    .neu-dropdown a:hover { background: #f5f5f5; }
+    .neu-dropdown .dropdown-desc {
+      font-size: 12px; color: #888; margin-top: 2px;
+    }
 
     /* Search */
     .toolbar { margin-bottom: 16px; }
@@ -71,63 +72,18 @@
     .pagination-buttons button.active { background: #222; color: #fff; border-color: #222; }
     .pagination-buttons button:disabled { opacity: 0.4; cursor: default; }
 
-    /* Modal Overlay */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-      z-index: 100; justify-content: center; padding-top: 120px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: #fff; width: 560px; max-height: 480px; border-radius: 8px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column;
-      overflow: hidden; align-self: flex-start;
-    }
-    .modal-input {
-      width: 100%; padding: 16px 20px; font-size: 16px; border: none;
-      border-bottom: 1px solid #eee; outline: none;
-    }
-    .modal-results {
-      overflow-y: auto; flex: 1;
-    }
-    .modal-section-label {
-      padding: 8px 20px 4px; font-size: 11px; font-weight: 600; color: #999;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .modal-item {
-      padding: 10px 20px; cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .modal-item:hover, .modal-item.selected { background: #f0f0f0; }
-    .modal-item .item-label { flex: 1; }
-    .modal-item .item-type {
-      font-size: 11px; color: #999; text-transform: uppercase;
-    }
-    .modal-item .item-meta {
-      font-size: 12px; color: #888;
-    }
-    .modal-spinner {
-      padding: 12px 20px; font-size: 13px; color: #999;
-    }
-    .modal-hint {
-      padding: 16px 20px; font-size: 13px; color: #999; text-align: center;
-    }
-    .kbd {
-      font-size: 11px; background: #eee; padding: 2px 6px; border-radius: 3px;
-      border: 1px solid #ddd; font-family: monospace;
-    }
   </style>
 </head>
 <body>
 
   <div class="header">
     <h1>Mitglieder</h1>
-    <div class="split-btn">
-      <button class="split-btn-main" id="btnNeu">Neu</button>
-      <button class="split-btn-arrow" id="splitToggle">&#9660;</button>
-      <div class="split-dropdown" id="splitDropdown">
-        <a href="#" data-type="einzelmitgliedschaft">Einzelmitgliedschaft</a>
-        <a href="#" data-type="doppelmitgliedschaft">Doppelmitgliedschaft</a>
-        <a href="#" data-type="firmenmitgliedschaft">Firmenmitgliedschaft</a>
+    <div class="neu-btn-wrap">
+      <button class="neu-btn" id="btnNeu">Neu <span class="chevron">&#9660;</span></button>
+      <div class="neu-dropdown" id="neuDropdown">
+        <a href="#" data-type="einzelmitgliedschaft"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Einzelmitgliedschaft</a>
+        <a href="#" data-type="doppelmitgliedschaft"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span>Doppelmitgliedschaft<div class="dropdown-desc">Erfassung von Mitgliedschaften von zwei Personen</div></span></a>
+        <a href="#" data-type="firmenmitgliedschaft"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/></svg> Firmenmitgliedschaft</a>
       </div>
     </div>
   </div>
@@ -155,26 +111,11 @@
     <div class="pagination-buttons" id="pageButtons"></div>
   </div>
 
-  <!-- Command Palette Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <input type="text" class="modal-input" id="modalInput" placeholder="Name eingeben..." autocomplete="off">
-      <div class="modal-results" id="modalResults">
-        <div class="modal-hint">Tippe einen Namen ein, um eine Neuerfassung zu starten oder bestehende Kunden zu finden.</div>
-      </div>
-    </div>
-  </div>
-
   <script>
     const PAGE_SIZE = 20;
     let allData = [];
     let filtered = [];
     let currentPage = 1;
-
-    // Modal state
-    let modalItems = [];
-    let selectedIndex = -1;
-    let searchTimeout = null;
 
     async function init() {
       const res = await fetch('data/mitglieder.json');
@@ -231,177 +172,18 @@
       render();
     });
 
-    // ─── Modal Logic ───
+    // ─── Neu-Button Dropdown ───
 
-    function openModal() {
-      document.getElementById('modalOverlay').classList.add('open');
-      const input = document.getElementById('modalInput');
-      input.value = '';
-      selectedIndex = -1;
-      modalItems = [];
-      renderModalResults('', []);
-      setTimeout(() => input.focus(), 50);
-    }
-
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('open');
-      clearTimeout(searchTimeout);
-    }
-
-    function renderModalResults(query, kundenResults, loading) {
-      const results = document.getElementById('modalResults');
-
-      modalItems = [];
-      let html = '';
-
-      // Section: Neuerfassung options (always shown immediately)
-      html += '<div class="modal-section-label">Neuerfassung</div>';
-      const types = [
-        { key: 'einzelmitgliedschaft', label: 'Mitgliedschaft' },
-        { key: 'doppelmitgliedschaft', label: 'Doppelmitgliedschaft' },
-        { key: 'firmenmitgliedschaft', label: 'Firmenmitgliedschaft' },
-      ];
-      types.forEach(t => {
-        const idx = modalItems.length;
-        modalItems.push({ action: 'new', type: t.key, query });
-        html += `<div class="modal-item" data-index="${idx}">
-          <span class="item-label">Erfassung ${t.label} &ldquo;${escHtml(query)}&rdquo;</span>
-        </div>`;
-      });
-
-      // Section: Existing customers
-      html += '<div class="modal-section-label">Bestehende Kunden</div>';
-      if (loading) {
-        html += '<div class="modal-spinner">Suche...</div>';
-      } else if (kundenResults.length === 0) {
-        html += '<div class="modal-spinner">Keine Treffer</div>';
-      } else {
-        kundenResults.forEach(m => {
-          const idx = modalItems.length;
-          modalItems.push({ action: 'open', data: m });
-          let statusText = m.status === 'gekuendigt'
-            ? `gekündigt (${new Date(m.status_datum).toLocaleDateString('de-CH')})`
-            : m.status;
-          html += `<div class="modal-item" data-index="${idx}">
-            <span class="item-label">${escHtml(m.name)}<br><span class="item-meta">${escHtml(m.adresse.strasse)}, ${escHtml(m.adresse.plz)} ${escHtml(m.adresse.ort)}</span></span>
-            <span class="item-meta">${statusText}</span>
-          </div>`;
-        });
-      }
-
-      results.innerHTML = html;
-      updateSelection();
-    }
-
-    function updateSelection() {
-      document.querySelectorAll('#modalResults .modal-item').forEach((el, i) => {
-        el.classList.toggle('selected', i === selectedIndex);
-        if (i === selectedIndex) el.scrollIntoView({ block: 'nearest' });
-      });
-    }
-
-    function selectItem(index) {
-      if (index < 0 || index >= modalItems.length) return;
-      const item = modalItems[index];
-      if (item.action === 'new') {
-        const parts = item.query.trim().split(/\s+/);
-        const vorname = parts[0] || '';
-        const nachname = parts.slice(1).join(' ') || '';
-        window.location.href = `neuaufnahme.html?typ=${item.type}&vorname=${encodeURIComponent(vorname)}&nachname=${encodeURIComponent(nachname)}`;
-      } else if (item.action === 'open') {
-        const m = item.data;
-        const typ = m.typ === 'doppelmitglied' ? 'doppelmitgliedschaft' : m.typ === 'firmenmitglied' ? 'firmenmitgliedschaft' : 'einzelmitgliedschaft';
-        const p = new URLSearchParams({ typ, nummer: m.nummer });
-        m.nutzer.forEach((n, i) => { p.set('vorname' + (i||''), n.vorname); p.set('nachname' + (i||''), n.nachname); });
-        p.set('strasse', m.adresse.strasse);
-        p.set('plz', m.adresse.plz);
-        p.set('ort', m.adresse.ort);
-        p.set('status', m.status);
-        p.set('status_datum', m.status_datum);
-        window.location.href = `neuaufnahme.html?${p.toString()}`;
-      }
-    }
-
-    // Modal input handler
-    document.getElementById('modalInput').addEventListener('input', function () {
-      const q = this.value;
-      selectedIndex = -1;
-      clearTimeout(searchTimeout);
-
-      if (!q.trim()) {
-        renderModalResults('', []);
-        return;
-      }
-
-      // Show new-options immediately, customers loading
-      renderModalResults(q, [], true);
-
-      // Simulate 500ms delay for customer search
-      searchTimeout = setTimeout(() => {
-        const lower = q.toLowerCase();
-        const matches = allData.filter(m =>
-          m.name.toLowerCase().includes(lower) ||
-          m.nummer.includes(lower)
-        ).slice(0, 8);
-        renderModalResults(q, matches, false);
-      }, 500);
-    });
-
-    // Keyboard navigation in modal
-    document.getElementById('modalInput').addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (modalItems.length > 0) {
-          selectedIndex = Math.min(selectedIndex + 1, modalItems.length - 1);
-          updateSelection();
-        }
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (modalItems.length > 0) {
-          selectedIndex = Math.max(selectedIndex - 1, 0);
-          updateSelection();
-        }
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (selectedIndex >= 0) selectItem(selectedIndex);
-      } else if (e.key === 'Escape') {
-        closeModal();
-      }
-    });
-
-    // Click on modal items
-    document.getElementById('modalResults').addEventListener('click', function (e) {
-      const item = e.target.closest('.modal-item');
-      if (item) selectItem(parseInt(item.dataset.index));
-    });
-
-    // Close modal on overlay click
-    document.getElementById('modalOverlay').addEventListener('click', function (e) {
-      if (e.target === this) closeModal();
-    });
-
-    // Open modal via "Neu" button
-    document.getElementById('btnNeu').addEventListener('click', openModal);
-
-    // Cmd+K shortcut
-    document.addEventListener('keydown', function (e) {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        openModal();
-      }
-    });
-
-    // Split button dropdown
-    document.getElementById('splitToggle').addEventListener('click', function (e) {
+    document.getElementById('btnNeu').addEventListener('click', function (e) {
       e.stopPropagation();
-      document.getElementById('splitDropdown').classList.toggle('open');
-    });
-    document.addEventListener('click', function () {
-      document.getElementById('splitDropdown').classList.remove('open');
+      document.getElementById('neuDropdown').classList.toggle('open');
     });
 
-    // Dropdown items → navigate directly to neuaufnahme
-    document.querySelectorAll('#splitDropdown a').forEach(a => {
+    document.addEventListener('click', function () {
+      document.getElementById('neuDropdown').classList.remove('open');
+    });
+
+    document.querySelectorAll('#neuDropdown a').forEach(a => {
       a.addEventListener('click', function (e) {
         e.preventDefault();
         window.location.href = `neuaufnahme.html?typ=${this.dataset.type}`;
