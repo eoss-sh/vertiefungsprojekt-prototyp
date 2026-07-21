@@ -44,34 +44,35 @@
     }
 
     /* Document preview card */
-    .doc-preview {
-      margin-top: 16px; border: 1px solid #ddd; border-radius: 6px;
-      padding: 16px; background: #fafafa; position: relative;
-    }
-    .doc-preview-icons {
-      display: flex; gap: 8px; margin-bottom: 12px;
-    }
-    .doc-icon {
-      width: 28px; height: 28px; border-radius: 50%; background: #eee; border: 1px solid #ddd;
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      font-size: 13px; color: #666;
-    }
-    .doc-icon:hover { background: #ddd; }
-    .doc-lines { }
-    .doc-line {
-      height: 8px; background: #ddd; border-radius: 2px; margin-bottom: 6px;
-    }
-    .doc-line.short { width: 60%; }
-    .doc-line.medium { width: 80%; }
-    .doc-line.long { width: 95%; }
-    .doc-line.title { height: 10px; width: 40%; background: #ccc; margin-bottom: 10px; }
-
-    .doc-icon-subtle { opacity: 0.35; }
-    .doc-icon-subtle:hover { opacity: 1; }
-
     .preview-row {
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; margin-top: 24px;
     }
+    .doc-card-label {
+      font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase;
+      letter-spacing: 0.3px; margin-bottom: 8px;
+    }
+    .doc-card {
+      background: #fff; border: 1px solid #ddd; border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      padding: 20px; cursor: pointer; position: relative;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .doc-card:hover {
+      border-color: #aaa; box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .doc-card-text {
+      font-size: 11px; line-height: 1.6; color: #666; white-space: pre-line;
+      overflow: hidden; max-height: 140px;
+      mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+    }
+    .doc-card-actions {
+      display: flex; gap: 16px; margin-top: 10px; font-size: 13px;
+    }
+    .doc-card-actions a {
+      color: #222; text-decoration: underline; cursor: pointer; font-weight: 500;
+    }
+    .doc-card-actions a:hover { color: #555; }
 
     /* Preview Modal */
     .modal-overlay {
@@ -155,7 +156,7 @@
     </div>
 
     <!-- Spalte 2: Abrechnung -->
-    <div>
+    <div id="abrechnungCol">
       <div class="col-section">
         <h2>Abrechnung</h2>
         <div class="check-row">
@@ -186,42 +187,27 @@
     </div>
   </div>
 
-  <!-- Previews auf gleicher Höhe -->
+  <!-- Dokument-Vorschau -->
   <div class="preview-row">
     <div></div>
-    <div>
-      <div class="doc-preview">
-        <div class="doc-preview-icons">
-          <div class="doc-icon" title="Vorschau" onclick="openPreview('rechnung')">&#128065;</div>
-          <div class="doc-icon doc-icon-subtle" title="Bearbeiten" onclick="openEdit('rechnung')">&#9998;</div>
-        </div>
-        <div class="doc-lines">
-          <div class="doc-line title"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line medium"></div>
-          <div class="doc-line short"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line medium"></div>
-        </div>
+    <div id="rechnungPreviewCol">
+      <div class="doc-card-label">Rechnung</div>
+      <div class="doc-card" onclick="openPreview('rechnung')">
+        <div class="doc-card-text" id="rechnungPreviewText"></div>
+      </div>
+      <div class="doc-card-actions">
+        <a onclick="openPreview('rechnung')">Vorschau</a>
+        <a onclick="openEdit('rechnung')">Bearbeiten</a>
       </div>
     </div>
-    <div>
-      <div class="doc-preview">
-        <div class="doc-preview-icons">
-          <div class="doc-icon" title="Vorschau" onclick="openPreview('brief')">&#128065;</div>
-          <div class="doc-icon doc-icon-subtle" title="Bearbeiten" onclick="openEdit('brief')">&#9998;</div>
-        </div>
-        <div class="doc-lines">
-          <div class="doc-line title"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line medium"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line short"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line long"></div>
-          <div class="doc-line medium"></div>
-        </div>
+    <div id="kommPreviewCol">
+      <div class="doc-card-label" id="kommPreviewLabel">Willkommensbrief</div>
+      <div class="doc-card" id="kommPreviewCard">
+        <div class="doc-card-text" id="briefPreviewText"></div>
+      </div>
+      <div class="doc-card-actions" id="kommPreviewActions">
+        <a id="kommActionPreview">Vorschau</a>
+        <a id="kommActionEdit">Bearbeiten</a>
       </div>
     </div>
   </div>
@@ -288,6 +274,25 @@ Bei Fragen stehen wir Ihnen jederzeit gerne zur Verfügung.
 Freundliche Grüsse
 Verein Musterverein`;
 
+    const emailText = `An: mm@mail.ch
+Betreff: Willkommen als neues Mitglied
+
+Guten Tag
+
+Wir freuen uns sehr, Sie als neues Mitglied in unserem Verein begrüssen zu dürfen.
+
+Ihre Mitgliedschaft ist ab sofort aktiv. Im Anhang finden Sie Ihre Rechnung für das laufende Jahr.
+
+Als Mitglied profitieren Sie von folgenden Vorteilen:
+- Zugang zu allen Vereinsanlässen
+- Vergünstigungen bei Partnerorganisationen
+- Monatlicher Newsletter
+
+Bei Fragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+
+Freundliche Grüsse
+Verein Musterverein`;
+
     // ─── E-Mails aus sessionStorage laden ───
     const stored = JSON.parse(sessionStorage.getItem('erfassung_emails') || '{}');
     const allEmails = [...new Set(Object.values(stored).flat().filter(Boolean))];
@@ -305,28 +310,44 @@ Verein Musterverein`;
       });
     }
 
-    // Update Betrag when Kategorie changes
-    document.getElementById('kategorie').addEventListener('change', function () {
-      const betrag = parseFloat(this.value).toFixed(2);
-      document.getElementById('betragLabel').textContent = 'CHF ' + betrag;
-    });
+    // Update Betrag & Rechnungsblock basierend auf Kategorie und Vertragsbedingung
+    function updateAbrechnung() {
+      const vertrag = document.getElementById('vertrag').value;
+      const kategorieBetrag = parseFloat(document.getElementById('kategorie').value);
+      const abrechnungCol = document.getElementById('abrechnungCol');
+      const rechnungPreviewCol = document.getElementById('rechnungPreviewCol');
+
+      if (vertrag === '1. Jahr keine Rechnung') {
+        abrechnungCol.style.display = 'none';
+        rechnungPreviewCol.style.display = 'none';
+      } else {
+        abrechnungCol.style.display = '';
+        rechnungPreviewCol.style.display = '';
+        const betrag = (vertrag === '1. Jahr kostenlos' || vertrag === 'kostenlos unbefristet')
+          ? '0.00' : kategorieBetrag.toFixed(2);
+        document.getElementById('betragLabel').textContent = 'CHF ' + betrag;
+      }
+    }
+
+    document.getElementById('kategorie').addEventListener('change', updateAbrechnung);
+    document.getElementById('vertrag').addEventListener('change', updateAbrechnung);
+
+    const previewTitles = { rechnung: 'Vorschau Rechnung', brief: 'Vorschau Brief', email: 'Vorschau E-Mail' };
+    const editTitles = { rechnung: 'Rechnung bearbeiten', brief: 'Brief bearbeiten', email: 'E-Mail bearbeiten' };
+    const texts = { rechnung: rechnungText, brief: briefText, email: emailText };
 
     function openPreview(type) {
       document.getElementById('previewOverlay').classList.add('open');
-      document.getElementById('previewTitle').textContent =
-        type === 'rechnung' ? 'Vorschau Rechnung' : 'Vorschau Brief';
-      const text = type === 'rechnung' ? rechnungText : briefText;
+      document.getElementById('previewTitle').textContent = previewTitles[type];
       document.getElementById('previewBody').innerHTML =
-        '<div class="doc-letter">' + text.split('\n').map(l => l ? '<p>' + l + '</p>' : '<br>').join('') + '</div>';
+        '<div class="doc-letter">' + texts[type].split('\n').map(l => l ? '<p>' + l + '</p>' : '<br>').join('') + '</div>';
     }
 
     function openEdit(type) {
       document.getElementById('previewOverlay').classList.add('open');
-      document.getElementById('previewTitle').textContent =
-        type === 'rechnung' ? 'Rechnung bearbeiten' : 'Brief bearbeiten';
-      const text = type === 'rechnung' ? rechnungText : briefText;
+      document.getElementById('previewTitle').textContent = editTitles[type];
       document.getElementById('previewBody').innerHTML =
-        '<textarea>' + text + '</textarea>';
+        '<textarea>' + texts[type] + '</textarea>';
     }
 
     function closePreview() {
@@ -340,6 +361,42 @@ Verein Musterverein`;
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closePreview();
     });
+
+    // Vorschau-Text in Karten einfügen
+    document.getElementById('rechnungPreviewText').textContent = rechnungText;
+    document.getElementById('briefPreviewText').textContent = briefText;
+
+    // Kommunikation: Brief/E-Mail Umschaltung
+    function getKommType() {
+      return document.getElementById('kommEmail').checked ? 'email' : 'brief';
+    }
+
+    function updateKommPreview() {
+      const isEmail = getKommType() === 'email';
+      const label = document.getElementById('kommPreviewLabel');
+      const previewText = document.getElementById('briefPreviewText');
+      const card = document.getElementById('kommPreviewCard');
+      const actionPreview = document.getElementById('kommActionPreview');
+      const actionEdit = document.getElementById('kommActionEdit');
+
+      if (isEmail) {
+        label.textContent = 'E-Mail';
+        previewText.textContent = emailText;
+        card.onclick = function () { openPreview('email'); };
+        actionPreview.onclick = function () { openPreview('email'); };
+        actionEdit.onclick = function () { openEdit('email'); };
+      } else {
+        label.textContent = 'Willkommensbrief';
+        previewText.textContent = briefText;
+        card.onclick = function () { openPreview('brief'); };
+        actionPreview.onclick = function () { openPreview('brief'); };
+        actionEdit.onclick = function () { openEdit('brief'); };
+      }
+    }
+
+    document.getElementById('kommBrief').addEventListener('change', updateKommPreview);
+    document.getElementById('kommEmail').addEventListener('change', updateKommPreview);
+    updateKommPreview();
 
     // Fertigstellen → Betrag speichern und zur Bestätigung
     document.getElementById('btnFertig').addEventListener('click', function () {

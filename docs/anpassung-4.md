@@ -15,4 +15,4 @@ Nutzer 1 - Mann + Nutzer 2 - Frau = Herr und Frau
 ## Name
 Vorname Nutzer 1 & " " & Nachname Nutzer 1 & " " & und & " " & Vorname Nutzer 2 & " " & Nachname Nutzer 2
 
-Sobald etwas im Feld des Namens steht, soll dieses nicht mehr aktualisiert werden. Die Aktualisierung soll erst passieren, wenn alle vier Felder (Nutzer 1 Vor- und Nachname + Nutzer 2 Vor- und Nachname) ausgefüllt sind und das Feld Doppelname noch leer ist. 
+Sobald etwas im Feld des Namens steht, soll dieses nicht mehr aktualisiert werden. Die Aktualisierung soll erst passieren, wenn alle vier Felder (Nutzer 1 Vor- und Nachname + Nutzer 2 Vor- und Nachname) ausgefüllt sind und das Feld Doppelname noch leer ist.
